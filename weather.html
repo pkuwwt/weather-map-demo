@@ -85,7 +85,8 @@ function onClick(e) {
 		.addUrlArg("tzshift", tzshift);
 
 	console.log(url);
-	show_image(url, 400, 800, 0);
+        open_in_new_tab(url);
+	//show_image(url, 400, 800, 0);
 }
 
 function show_image(src,width,height,alt){
@@ -98,9 +99,11 @@ function show_image(src,width,height,alt){
 
 	document.body.appendChild(img);
 }
-function show_content(url) {
-        var content ＝ $.get(url).html();
-        alert(content);
+
+function open_in_new_tab(url )
+{
+  var win=window.open(url, '_blank');
+  win.focus();
 }
 
 </script>
