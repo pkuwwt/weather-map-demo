@@ -1,0 +1,103 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>JSAPI与URLAPI结合示例</title>
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.5&ak=2b866a6daac9014292432d81fe9b47e3"></script>
+		<script src="http://d1.lashouimg.com/static/js/release/jquery-1.4.2.min.js" type="text/javascript"></script>
+
+		<style type="text/css">
+			html,body{
+				width:800px;
+				height:600px;
+				margin:0;
+				overflow:hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<div style="width:800px;height:600px;border:1px solid gray" id="container">
+		</div>
+	</body>
+</html>
+<script type="text/javascript">
+	var map = new BMap.Map("container");
+	var ls = new BMap.LocalSearch(map);
+	ls.setSearchCompleteCallback(searchComplete);
+	map.centerAndZoom(new BMap.Point(104.35444,28.708333), 5);
+	map.enableScrollWheelZoom();
+	map.enableKeyboard();
+	map.addControl(new BMap.NavigationControl());
+	//map.addEventListener("click",function(e){alert(e.point.lng+","+e.point.lat);});
+	map.addEventListener("click",onClick);
+	universities1 = new Array('清华大学','中南大学','中国传媒大学','中国海洋大学','中国计量学院','北京大学','北京工业大学','北京工商大学','北京理工大学','华东师范大学');
+	universities2 = new Array('武汉大学','厦门大学','大连理工大学','天津大学','山东大学','国防科技大学','大连海事大学','山东工商学院','成都信息工程学院');
+	universities3 = new Array('杭州师范大学','福州大学','西北农林科技大学','西南科技大学','首都师范大学');
+	universities4 = new Array('中国科学院大学','四川大学','汕头大学');
+	universities5 = new Array('伊利诺伊大学芝加哥分校','中科院计算所');
+	var count = 0;
+	ls.search(universities1);
+	ls.search(universities2);
+	ls.search(universities3);
+	ls.search(universities4);
+	function searchComplete(rs) {
+		if(ls.getStatus() == BMAP_STATUS_SUCCESS) {
+			for(var i=0;i<rs.length;++i) {
+				var poi = rs[i].getPoi(0);
+				if(poi) {
+					var marker = new BMap.Marker(poi.point);
+					marker.setLabel(new BMap.Label(rs[i].keyword));
+					map.addOverlay(marker);
+					count = count + 1;
+					//console.log(rs[i].keyword);
+					//console.log(count);
+				}
+			}
+		}
+	}
+String.prototype.endsWith = function(suffix) {
+	return this.indexOf(suffix,this.length-suffix.length) != -1;
+}
+function onClick(e) {
+	String.prototype.addUrlArg = function(name,val) {
+		var sep = "&";
+		if(this.endsWith(".html") ) sep = "?";
+		else if(this.endsWith(".htm") ) sep = "?";
+		else if(this.endsWith(".php") ) sep = "?";
+		return this + sep + name + "=" + val;
+	}
+	var url =  "www.7timer.com/v4/bin/";
+	var product= "two"; //two|astro|civil|civillight|meteo
+	var lon = e.point.lng;
+	var lat = e.point.lat;
+	var ac = 0;
+	var lang = "en";
+	var unit = "metric";
+	var output = "internal"; //json|xml|internal
+	var tzshift = 0;
+
+	url = url + product + ".php";
+	url = url.addUrlArg("lon", lon)
+		.addUrlArg("lat", lat)
+		.addUrlArg("ac", ac)
+		.addUrlArg("lang", lang)
+		.addUrlArg("unit", unit)
+		.addUrlArg("output", output)
+		.addUrlArg("tzshift", tzshift);
+
+	console.log(url);
+	show_image(url, 400, 800, 0);
+}
+
+function show_image(src,width,height,alt){
+	var img = document.createElement("img");
+	//img.src = src;
+	img.ref = src;
+	img.width = width;
+	img.height = height;
+	img.alt = alt;
+
+	document.body.appendChild(img);
+}
+
+</script>
+

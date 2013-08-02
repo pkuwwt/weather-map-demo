@@ -1,0 +1,16 @@
+
+Get City List
+Provinces Code: 
+  wget http://m.weather.com.cn/data5/city.xml?level=0
+
+Cities Code:
+  wget http://m.weather.com.cn/data5/city.xml?level=1
+
+Small Cities Code:
+wget http://m.weather.com.cn/data5/city.xml?level=2
+
+wget http://m.weather.com.cn/data5/city.xml?level=3
+
+
+Another good API:
+	http://7timer.y234.cn/doc.php?lang=zh-CN#api
